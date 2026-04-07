@@ -40,6 +40,22 @@
 
 <div id="crosshair"></div>
 
+<div id="resultPanel" style="
+    display: block;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    z-index: 10;
+    background: black;
+">
+  <div id="finalScore"></div>
+  <div id="finalAccuracy"></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 
 <script>
@@ -214,27 +230,23 @@ function endGame() {
   let total = hits + misses;
   let acc = total > 0 ? ((hits / total) * 100).toFixed(1) : 0;
 
-  alert(
-    "⏱️ Time's Up!\n\n" +
-    "Score: " + score + "\n" +
-    "Accuracy: " + acc + "%"
-  );
+  // ✅ show result UI instead of alert
+  document.getElementById("finalScore").innerText = "Score: " + score;
+  document.getElementById("finalAccuracy").innerText = "Accuracy: " + acc + "%";
 
+  document.getElementById("resultPanel").style.display = "block";
   document.getElementById("playAgain").style.display = "block";
 }
 
 function resetGame() {
-  // 🔥 STOP old timer first
   clearInterval(timerInterval);
 
-  // reset stats
   score = 0;
   hits = 0;
   misses = 0;
   timeLeft = GAME_DURATION;
   gameActive = true;
 
-  // clear targets
   targets.forEach(t => scene.remove(t));
   targets = [];
 
@@ -243,8 +255,8 @@ function resetGame() {
   updateUI();
   document.getElementById("time").innerText = timeLeft;
   document.getElementById("playAgain").style.display = "none";
+  document.getElementById("resultPanel").style.display = "none";
 
-  // 🔥 start fresh timer
   startTimer();
 }
 
