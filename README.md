@@ -4,9 +4,11 @@
 
 # Simple FPS aim trainer
 A lightweight browser-based FPS aim trainer built with **Three.js**, featuring **Valorant-style crosshair**, hit feedback, stats tracking, and dynamic difficulty.
+
+
+---
 [![Sponsor on GitHub](https://dabuttonfactory.com/button.png?t=Click+To+Play&f=Roboto-Bold&ts=28&tc=fff&hp=45&vp=20&w=1000&h=50&c=11&bgt=unicolored&bgc=f00)](https://aim-training-flame.vercel.app/)
 ---
-
 ## Features
 
 ### Core Gameplay
