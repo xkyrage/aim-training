@@ -9,8 +9,8 @@
 - Score + accuracy tracking
 
 ## Feature to be added
-- Time limit -> Retry/Play Again button
-- ViewModel
-- Visual Effect
-- Sound Effect
-- LocalStorage save stats and next maybe on cloud
+
+🏆 Best score tracking (localStorage)
+📈 Performance history chart
+🎯 Difficulty scaling (targets faster/smaller)
+💥 Hit markers + effects

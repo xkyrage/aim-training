@@ -44,6 +44,7 @@
 
 <script>
 const MAX_TARGETS = 3;
+const GAME_DURATION = 60;
 
 let scene, camera, renderer, raycaster, mouse;
 let targets = [];
@@ -51,6 +52,19 @@ let targets = [];
 let score = 0;
 let hits = 0;
 let misses = 0;
+
+let timeLeft = GAME_DURATION;
+let gameActive = true;
+let timerInterval;
+
+// 🔊 SOUND
+const shootSound = new Audio("asset/sound/shoot.mp3");
+const hitSound = new Audio("asset/sound/hit.mp3");
+const missSound = new Audio("asset/sound/miss.mp3");
+
+shootSound.volume = 0.5;
+hitSound.volume = 0.7;
+missSound.volume = 0.5;
 
 init();
 animate();
@@ -72,10 +86,11 @@ function init() {
   raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2(0, 0);
 
-  // spawn 3 targets
-  for (let i = 0; i < MAX_TARGETS; i++) {
-    spawnTarget();
-  }
+  // ✅ spawn targets (VISIBLE RANGE FIXED)
+  spawnInitialTargets();
+
+  // start timer AFTER everything ready
+  startTimer();
 
   // mouse movement
   window.addEventListener("mousemove", (event) => {
@@ -87,28 +102,42 @@ function init() {
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   });
 
-  // attach shoot event (you missed this)
   document.addEventListener("mousedown", shoot);
+window.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("playAgain");
+  if (btn) {
+    btn.addEventListener("click", resetGame);
+  }
+});
 }
 
-// FIXED: now global (not inside init)
+function spawnInitialTargets() {
+  for (let i = 0; i < MAX_TARGETS; i++) {
+    spawnTarget();
+  }
+}
+
+// ✅ FIXED RANGE (THIS WAS YOUR MAIN BUG)
 function spawnTarget() {
-  const geo = new THREE.SphereGeometry(0.3, 32, 32);
+  const geo = new THREE.SphereGeometry(0.4, 32, 32);
   const mat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
   const target = new THREE.Mesh(geo, mat);
 
   let valid = false;
 
   while (!valid) {
-    target.position.x = (Math.random() - 0.5) * 6;
-    target.position.y = (Math.random() - 0.5) * 4;
+    const rangeX = 3;   // FIXED
+    const rangeY = 2;   // FIXED
+
+    target.position.x = (Math.random() - 0.5) * rangeX;
+    target.position.y = (Math.random() - 0.5) * rangeY;
     target.position.z = 0;
 
     valid = true;
 
     for (let t of targets) {
       let dist = target.position.distanceTo(t.position);
-      if (dist < 1) {
+      if (dist < 0.8) {
         valid = false;
         break;
       }
@@ -119,8 +148,12 @@ function spawnTarget() {
   targets.push(target);
 }
 
-// FIXED: now global
 function shoot() {
+  if (!gameActive) return;
+
+  shootSound.currentTime = 0;
+  shootSound.play();
+
   raycaster.setFromCamera(mouse, camera);
   const intersects = raycaster.intersectObjects(targets);
 
@@ -133,10 +166,16 @@ function shoot() {
     score++;
     hits++;
 
-    spawnTarget(); // keep 3 targets
+    hitSound.currentTime = 0;
+    hitSound.play();
+
+    spawnTarget();
   } else {
     score--;
     misses++;
+
+    missSound.currentTime = 0;
+    missSound.play();
   }
 
   updateUI();
@@ -153,11 +192,81 @@ function updateUI() {
   document.getElementById("accuracy").innerText = acc + "%";
 }
 
+function startTimer() {
+  clearInterval(timerInterval); // prevent duplicates
+
+  timerInterval = setInterval(() => {
+    if (!gameActive) return;
+
+    timeLeft--;
+    document.getElementById("time").innerText = timeLeft;
+
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }, 1000);
+}
+
+function endGame() {
+  gameActive = false;
+  clearInterval(timerInterval);
+
+  let total = hits + misses;
+  let acc = total > 0 ? ((hits / total) * 100).toFixed(1) : 0;
+
+  alert(
+    "⏱️ Time's Up!\n\n" +
+    "Score: " + score + "\n" +
+    "Accuracy: " + acc + "%"
+  );
+
+  document.getElementById("playAgain").style.display = "block";
+}
+
+function resetGame() {
+  // 🔥 STOP old timer first
+  clearInterval(timerInterval);
+
+  // reset stats
+  score = 0;
+  hits = 0;
+  misses = 0;
+  timeLeft = GAME_DURATION;
+  gameActive = true;
+
+  // clear targets
+  targets.forEach(t => scene.remove(t));
+  targets = [];
+
+  spawnInitialTargets();
+
+  updateUI();
+  document.getElementById("time").innerText = timeLeft;
+  document.getElementById("playAgain").style.display = "none";
+
+  // 🔥 start fresh timer
+  startTimer();
+}
+
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
 </script>
+<div id="timerUI" style="position:absolute; top:10px; right:10px; color:white;">
+  Time: <span id="time">60</span>
+</div>
 
+<button id="playAgain" style="
+  display:none;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  padding:10px 20px;
+  font-size:18px;
+">
+  Play Again
+</button>
 </body>
 </html>
