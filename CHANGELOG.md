@@ -1,4 +1,4 @@
-# 📜 Changelog
+# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -23,7 +23,7 @@ and this project follows Semantic Versioning (SemVer).
 ---
 
 ## [0.6.0] - 2026-04-07
-### ✨ Added
+### Added
 - Best score saved via localStorage
 - Stats history (recent runs)
 - Difficulty scaling:
