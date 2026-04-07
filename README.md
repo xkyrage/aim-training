@@ -2,15 +2,236 @@
 
 
 # Simple FPS aim trainer
+A lightweight browser-based FPS aim trainer built with **Three.js**, featuring **Valorant-style crosshair**, hit feedback, stats tracking, and dynamic difficulty.
+
+---
 
 ## Features
-- Moving targets
-- Gridshot Multiple targets
-- Score + accuracy tracking
 
-## Feature to be added
+### Core Gameplay
 
-🏆 Best score tracking (localStorage)
-📈 Performance history chart
-🎯 Difficulty scaling (targets faster/smaller)
-💥 Hit markers + effects
+* 3D targets with lighting (real depth feel)
+* 3 simultaneous targets
+* Moving targets with increasing speed
+* Miss penalty system (score -1)
+
+### Shooting System
+
+* Raycasting hit detection (accurate FPS logic)
+* Hit / miss / shoot sound effects
+* Hit flash effect on target
+
+### Crosshair (Valorant-style)
+
+* Adjustable:
+
+  * Thickness
+  * Length
+  * Gap
+  * Outline
+* Clean + customizable UI-based rendering
+
+### Game Mode
+
+* 60-second timed session
+* End-game summary (score & accuracy)
+* "Play Again" restart system
+
+### Stats Tracking
+
+* Score
+* Hits / Misses
+* Accuracy %
+* 🏆 Best score (saved in localStorage)
+* 📈 Session history (last runs)
+
+### Visual Effects
+
+* Transparent canvas over custom background
+* 3D lighting (ambient + directional)
+* Hit flash feedback
+
+---
+
+## Tech Stack
+
+* **Three.js** (3D rendering)
+* **Vanilla JavaScript**
+* **HTML + CSS**
+* **LocalStorage API**
+
+---
+
+## 📂 Project Structure
+
+```
+aim-trainer/
+│
+├── index.html
+├── asset/
+│   ├── img/
+│   │   └── grid-background.jpg
+│   └── sound/
+│       ├── shoot.mp3
+│       ├── hit.mp3
+│       └── miss.mp3
+│
+└── README.md
+```
+
+---
+
+## ▶How to Run
+
+### Option 1 (Simple and Super Easy)
+
+Just open:
+
+```
+index.html
+```
+
+### Option 2 (Recommended - local server)
+
+Use VS Code Live Server or:
+
+```bash
+npx serve .
+```
+
+---
+
+## Controls
+
+| Action  | Input             |
+| ------- | ----------------- |
+| Aim     | Mouse movement    |
+| Shoot   | Left click        |
+| Restart | Play Again button |
+
+---
+
+## Crosshair Settings (Example)
+
+```js
+const crosshairSettings = {
+  thickness: 2,
+  length: 8,
+  gap: 6,
+  outline: true,
+  outlineThickness: 2
+};
+```
+
+---
+
+## Data Persistence
+
+Stored locally in browser:
+
+* Best Score
+* Last session history
+
+---
+
+## 📸 Preview
+
+> FPS-style aim trainer with dynamic targets and Valorant-like feel.
+
+---
+
+## Learning Purpose
+
+This project demonstrates:
+
+* 3D interaction with Three.js
+* Raycasting (FPS hit detection)
+* Game loop & animation
+* UI + DOM + Canvas integration
+* Local storage usage
+
+---
+
+# Improvement Roadmap
+
+## Phase 1 – Gameplay Polish
+
+* [x] Hit marker (Valorant style X)
+* [x] Different target types (fast / small / tracking)
+
+---
+
+## Phase 2 – Advanced Training Modes
+
+* [x] Gridshot mode (like 3D Aim Trainer)
+* [ ] Flick training mode
+* [ ] Tracking mode (smooth moving targets)
+* [ ] Reaction time mode
+
+---
+
+## Phase 3 – Analytics System
+
+* [ ] Accuracy over time graph
+* [ ] Heatmap of misses
+* [ ] Session comparison
+* [ ] Export stats (JSON)
+
+---
+
+## Phase 4 – Settings UI
+
+* [ ] Full settings panel (like Valorant)
+* [ ] Sensitivity converter (DPI → in-game sens)
+* [ ] Crosshair editor UI
+* [ ] Audio Toggle On/Off
+---
+
+## Phase 5 – Deployment & Backend
+
+* [ ] Deploy to Vercel / Netlify
+* [ ] User accounts (login system)
+* [ ] Cloud leaderboard
+* [ ] Save stats online
+
+---
+
+## Phase 6 – Visual Upgrade
+
+* [ ] Bloom/glow effects refinement
+* [ ] Particle effects on hit
+* [ ] Better UI (glassmorphism / neon theme)
+* [ ] Animated background
+
+---
+
+## Phase 7 – AI Training
+
+* [ ] Adaptive difficulty (AI adjusts speed)
+* [ ] Skill rating system
+* [ ] Personalized training suggestions
+
+---
+
+# Author
+
+**xkysoft interactive 2026**
+Tegar Ibrahim
+
+---
+
+# Support
+
+If you like this project:
+
+* ⭐ Star the repo
+* 🍴 Fork it
+* 🚀 Improve it
+
+---
+
+# 📜 License
+
+MIT License (free to use & modify)
+
+---
