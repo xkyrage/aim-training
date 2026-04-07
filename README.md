@@ -136,7 +136,9 @@ Stored locally in browser:
 
 ## 📸 Preview
 
-> FPS-style aim trainer with dynamic targets and Valorant-like feel.
+<img width="1356" height="585" alt="image" src="https://github.com/user-attachments/assets/51bc6f5b-6358-4224-a387-7de43c3ffd3a" />
+<img width="1374" height="640" alt="image" src="https://github.com/user-attachments/assets/7721d48f-a3c3-4fb1-b465-e867d0925ae6" />
+
 
 ---
 
