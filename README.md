@@ -8,10 +8,6 @@
 - Gridshot Multiple targets
 - Score + accuracy tracking
 
-## Run
-Open index.html in browser
-
-
 ## Feature to be added
 - Time limit -> Retry/Play Again button
 - ViewModel
