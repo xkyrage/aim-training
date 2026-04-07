@@ -1,7 +1,7 @@
 <img width="1573" height="340" alt="image" src="https://github.com/user-attachments/assets/efbf69f2-215f-4f96-a08a-82854f149cd8" />
 
 
-# Simple FPS aim trainer built with Three.js.
+# Simple FPS aim trainer
 
 ## Features
 - Moving targets
