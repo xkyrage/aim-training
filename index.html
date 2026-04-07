@@ -1,12 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Aim Trainer Pro</title>
+  <title>Aim Trainer</title>
   <style>
-    body { margin: 0; overflow: hidden; background: black; }
-    #ui { position: absolute; top: 10px; left: 10px; color: white; font-family: Arial; }
-    #crosshair { position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: white; transform: translate(-50%, -50%); }
-    #playAgain { display:none; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); }
+    body {  
+      margin: 0;
+      overflow: hidden;
+      cursor: none;
+      background: url("asset/img/grid-background.jpg") no-repeat center center fixed;
+      background-size: cover; 
+    }
+
+    #ui {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: white;
+      font-family: Arial;
+    }
+
+    #crosshair {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: white;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -16,156 +36,128 @@
   <div>Hits: <span id="hits">0</span></div>
   <div>Misses: <span id="misses">0</span></div>
   <div>Accuracy: <span id="accuracy">100%</span></div>
-  <div>Time: <span id="timer">60</span></div>
-  <div>Best Score: <span id="best">0</span></div>
 </div>
 
 <div id="crosshair"></div>
-<button id="playAgain">Play Again</button>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 
 <script>
-let scene, camera, renderer, raycaster;
+const MAX_TARGETS = 3;
+
+let scene, camera, renderer, raycaster, mouse;
 let targets = [];
 
-let score=0, hits=0, misses=0;
-let sensitivity=0.002, yaw=0, pitch=0;
-
-let gameTime=60, timeLeft=60, gameActive=true;
-
-let stats={bestScore:0};
-loadStats();
+let score = 0;
+let hits = 0;
+let misses = 0;
 
 init();
 animate();
-startTimer();
 
-function init(){
- scene=new THREE.Scene();
- camera=new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight,0.1,1000);
- camera.position.z=5;
+function init() {
+  scene = new THREE.Scene();
 
- renderer=new THREE.WebGLRenderer();
- renderer.setSize(window.innerWidth, window.innerHeight);
- document.body.appendChild(renderer.domElement);
+  camera = new THREE.PerspectiveCamera(
+    75, window.innerWidth / window.innerHeight, 0.1, 1000
+  );
+  camera.position.z = 5;
+  camera.lookAt(0,0,0);
 
- raycaster=new THREE.Raycaster();
+  renderer = new THREE.WebGLRenderer({ alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0); 
+  document.body.appendChild(renderer.domElement);
 
- spawnTarget();
+  raycaster = new THREE.Raycaster();
+  mouse = new THREE.Vector2(0, 0);
 
- document.body.addEventListener("click",()=>document.body.requestPointerLock());
- document.addEventListener("mousemove",onMouseMove);
- document.addEventListener("mousedown",shoot);
-
- document.getElementById("playAgain").onclick=resetGame;
-
- updateUI();
-}
-
-function spawnTarget(){
- let geo=new THREE.SphereGeometry(0.3,32,32);
- let mat=new THREE.MeshBasicMaterial({color:0xff0000});
- let t=new THREE.Mesh(geo,mat);
-
- t.position.x=(Math.random()-0.5)*6;
- t.position.y=(Math.random()-0.5)*4;
-
- t.userData.velocity={x:(Math.random()-0.5)*0.05,y:(Math.random()-0.5)*0.05};
-
- scene.add(t);
- targets.push(t);
-}
-
-function onMouseMove(e){
- if(document.pointerLockElement!==document.body) return;
- yaw-=e.movementX*sensitivity;
- pitch-=e.movementY*sensitivity;
- pitch=Math.max(-Math.PI/2,Math.min(Math.PI/2,pitch));
- camera.rotation.set(pitch,yaw,0);
-}
-
-function shoot(){
- if(!gameActive) return;
-
- raycaster.setFromCamera(new THREE.Vector2(0,0),camera);
- let intersects=raycaster.intersectObjects(targets);
-
- if(intersects.length>0){
-   let hit=intersects[0].object;
-   scene.remove(hit);
-   targets=targets.filter(x=>x!==hit);
-   score++; hits++;
-   spawnTarget();
- } else {
-   score--; misses++;
- }
- updateUI();
- saveStats();
-}
-
-function updateUI(){
- document.getElementById("score").innerText=score;
- document.getElementById("hits").innerText=hits;
- document.getElementById("misses").innerText=misses;
- let total=hits+misses;
- let acc=total?((hits/total)*100).toFixed(1):100;
- document.getElementById("accuracy").innerText=acc+"%";
- document.getElementById("best").innerText=stats.bestScore;
-}
-
-function animate(){
- requestAnimationFrame(animate);
- targets.forEach(t=>{
-  t.position.x+=t.userData.velocity.x;
-  t.position.y+=t.userData.velocity.y;
-  if(t.position.x>3||t.position.x<-3) t.userData.velocity.x*=-1;
-  if(t.position.y>2||t.position.y<-2) t.userData.velocity.y*=-1;
- });
- renderer.render(scene,camera);
-}
-
-function startTimer(){
- let interval=setInterval(()=>{
-  if(!gameActive) return;
-  timeLeft--;
-  document.getElementById("timer").innerText=timeLeft;
-  if(timeLeft<=0){
-    clearInterval(interval);
-    endGame();
+  // spawn 3 targets
+  for (let i = 0; i < MAX_TARGETS; i++) {
+    spawnTarget();
   }
- },1000);
+
+  // mouse movement
+  window.addEventListener("mousemove", (event) => {
+    const crosshair = document.getElementById("crosshair");
+    crosshair.style.left = event.clientX + "px";
+    crosshair.style.top = event.clientY + "px";
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  });
+
+  // attach shoot event (you missed this)
+  document.addEventListener("mousedown", shoot);
 }
 
-function endGame(){
- gameActive=false;
- document.getElementById("playAgain").style.display="block";
- alert("Game Over! Score: "+score);
+// FIXED: now global (not inside init)
+function spawnTarget() {
+  const geo = new THREE.SphereGeometry(0.3, 32, 32);
+  const mat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+  const target = new THREE.Mesh(geo, mat);
+
+  let valid = false;
+
+  while (!valid) {
+    target.position.x = (Math.random() - 0.5) * 6;
+    target.position.y = (Math.random() - 0.5) * 4;
+    target.position.z = 0;
+
+    valid = true;
+
+    for (let t of targets) {
+      let dist = target.position.distanceTo(t.position);
+      if (dist < 1) {
+        valid = false;
+        break;
+      }
+    }
+  }
+
+  scene.add(target);
+  targets.push(target);
 }
 
-function resetGame(){
- score=0; hits=0; misses=0;
- timeLeft=gameTime;
- gameActive=true;
+// FIXED: now global
+function shoot() {
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(targets);
 
- targets.forEach(t=>scene.remove(t));
- targets=[];
- spawnTarget();
+  if (intersects.length > 0) {
+    const hit = intersects[0].object;
 
- document.getElementById("playAgain").style.display="none";
- startTimer();
- updateUI();
+    scene.remove(hit);
+    targets = targets.filter(t => t !== hit);
+
+    score++;
+    hits++;
+
+    spawnTarget(); // keep 3 targets
+  } else {
+    score--;
+    misses++;
+  }
+
+  updateUI();
 }
 
-function saveStats(){
- if(score>stats.bestScore) stats.bestScore=score;
- localStorage.setItem("aimStats",JSON.stringify(stats));
+function updateUI() {
+  document.getElementById("score").innerText = score;
+  document.getElementById("hits").innerText = hits;
+  document.getElementById("misses").innerText = misses;
+
+  let total = hits + misses;
+  let acc = total > 0 ? ((hits / total) * 100).toFixed(1) : 100;
+
+  document.getElementById("accuracy").innerText = acc + "%";
 }
 
-function loadStats(){
- let s=localStorage.getItem("aimStats");
- if(s) stats=JSON.parse(s);
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
 }
 </script>
+
 </body>
 </html>
