@@ -2,6 +2,7 @@
 <html>
 <head>
   <link rel="icon" type="image/png" href="asset/img/fav.png">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
   <title>Aim Trainer</title>
   <style>
     body {  
@@ -12,13 +13,61 @@
       background-size: cover; 
     }
 
-    #ui {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      color: white;
-      font-family: Arial;
-    }
+   #ui {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0px;
+  z-index: 10;
+  font-family: Arial, sans-serif;
+}
+
+/* HUD boxes */
+.hud {
+  background: linear-gradient(135deg, #1a1f3c, #2c3566);
+  color: white;
+  padding: 10px 20px;
+  min-width: 120px;
+  text-align: center;
+  position: relative;
+  font-weight: bold;
+}
+
+/* Angled edges */
+.hud::before,
+.hud::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 30px;
+  height: 100%;
+  background: inherit;
+}
+
+.hud::before {
+  left: -8px;
+  transform: skewX(-20deg);
+}
+
+.hud::after {
+  right: -8px;
+  transform: skewX(20deg);
+}
+
+/* Center timer bigger */
+.hud.center {
+  font-size: 22px;
+  padding: 10px 30px;
+}
+
+/* Label styling */
+.label {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-right: 6px;
+}
 
     #crosshair {
   position: absolute;
@@ -34,6 +83,105 @@
 .crosshair-outline {
   position: absolute;
   background: black;
+}
+
+#debugStats {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: rgb(0, 0, 0);
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 12px;
+  background-color: azure;
+  
+}
+
+/* 🌑 Overlay */
+#resultOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  backdrop-filter: blur(-15px);
+  background: rgba(0,0,0,0.7);
+
+  z-index: 9999;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 🚀 Modal box */
+.modal-box {
+  animation: popIn 0.3s ease-out;
+  font-family: 'Rajdhani', sans-serif;
+  background: rgba(10, 15, 40, 0.95);
+  border: 2px solid #00ffff;
+  padding: 40px 60px;
+  border-radius: 16px;
+
+  text-align: center;
+  color: white;
+
+  box-shadow: 
+    0 0 20px #00ffff,
+    0 0 60px rgba(0,255,255,0.3);
+
+  min-width: 300px;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Title */
+.modal-box h2 {
+  font-family: 'Rajdhani', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+  color: #00ffff;
+}
+
+/* Stats */
+.stat {
+  margin: 12px 0;
+  font-size: 18px;
+}
+
+/* Button */
+#playAgain {
+  margin-top: 25px;
+  padding: 12px 30px;
+  font-size: 16px;
+
+  background: linear-gradient(135deg, #00ffff, #00aaff);
+  border: none;
+  border-radius: 6px;
+
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+#playAgain:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ffff;
 }
 
 #footer {
@@ -54,41 +202,49 @@
 <body>
 
 <div id="ui">
-  <div>Score: <span id="score">0</span></div>
-  <div>Hits: <span id="hits">0</span></div>
-  <div>Misses: <span id="misses">0</span></div>
-  <div>Accuracy: <span id="accuracy">100%</span></div>
+  <div class="hud left">
+    <span class="label">PTS</span>
+    <span id="score">0</span>
+  </div>
+
+  <div class="hud center">
+    <span id="time">60</span>
+  </div>
+
+  <div class="hud right">
+    <span id="accuracy">100%</span>
+  </div>
+</div>
+
+<div id="debugStats">
+  Hits: <span id="hits">0</span> |
+  Misses: <span id="misses">0</span>
 </div>
 
 <div id="crosshair"></div>
 
-<div id="resultPanel" style="
-    display: none;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 24px;
-    text-align: center;
-    z-index: 10;
-    background: black;
-">
-  <div id="finalScore"></div>
-  <div id="finalAccuracy"></div>
-  <div>Best: <span id="bestScore">0</span></div>
+<div id="resultOverlay">
+  <div class="modal-box">
+
+    <h2>Aim Training RESULT</h2>
+
+    <div class="stat">
+      Score: <span id="finalScore">0</span>
+    </div>
+
+    <div class="stat">
+      Accuracy: <span id="finalAccuracy">0%</span>
+    </div>
+
+    <div class="stat">
+      Best: <span id="bestScore">0</span>
+    </div>
+
+    <button id="playAgain">Play Again</button>
+
+  </div>
 </div>
-<button id="playAgain" style="
-  display:none;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  padding:10px 20px;
-  font-size:18px;
-">
-  Play Again
-</button>
+
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/postprocessing/EffectComposer.js"></script>
@@ -118,56 +274,31 @@ let targetSpeed = 0.01;
 const shootSound = new Audio("asset/sound/shoot.mp3");
 const hitSound = new Audio("asset/sound/hit.mp3");
 const missSound = new Audio("asset/sound/miss.mp3");
+const endSound = new Audio("asset/sound/notification.mp3")
 
-// 🎯 CROSSHAIR SETTINGS (like Valorant)
+// 🎯 CROSSHAIR SETTINGS
 const crosshairSettings = {
-  thickness: 2,   // line thickness
-  length: 8,      // line length
-  gap: 6,         // center gap
+  thickness: 2,
+  length: 8,
+  gap: 6,
   outline: true,
   outlineThickness: 2
 };
 
 function createCrosshair() {
   const crosshair = document.getElementById("crosshair");
-  crosshair.innerHTML = ""; // reset
+  crosshair.innerHTML = "";
 
   const dirs = ["top", "bottom", "left", "right"];
 
   dirs.forEach(dir => {
-    // MAIN LINE
     const line = document.createElement("div");
-    line.className = "crosshair-line";
-
-    // OUTLINE (optional)
-    let outline;
-    if (crosshairSettings.outline) {
-      outline = document.createElement("div");
-      outline.className = "crosshair-outline";
-      crosshair.appendChild(outline);
-    }
-
-    let sizeMain, sizeOutline;
+    line.style.position = "absolute";
+    line.style.background = "white";
 
     if (dir === "top" || dir === "bottom") {
-      // vertical lines
-      sizeMain = {
-        width: crosshairSettings.thickness,
-        height: crosshairSettings.length
-      };
-
-      sizeOutline = {
-        width: crosshairSettings.thickness + crosshairSettings.outlineThickness * 2,
-        height: crosshairSettings.length + crosshairSettings.outlineThickness * 2
-      };
-
-      line.style.width = sizeMain.width + "px";
-      line.style.height = sizeMain.height + "px";
-
-      if (outline) {
-        outline.style.width = sizeOutline.width + "px";
-        outline.style.height = sizeOutline.height + "px";
-      }
+      line.style.width = crosshairSettings.thickness + "px";
+      line.style.height = crosshairSettings.length + "px";
 
       let y = dir === "top"
         ? -(crosshairSettings.gap + crosshairSettings.length)
@@ -177,31 +308,9 @@ function createCrosshair() {
       line.style.top = `calc(50% + ${y}px)`;
       line.style.transform = "translateX(-50%)";
 
-      if (outline) {
-        outline.style.left = "50%";
-        outline.style.top = `calc(50% + ${y - crosshairSettings.outlineThickness}px)`;
-        outline.style.transform = "translateX(-50%)";
-      }
-
     } else {
-      // horizontal lines
-      sizeMain = {
-        width: crosshairSettings.length,
-        height: crosshairSettings.thickness
-      };
-
-      sizeOutline = {
-        width: crosshairSettings.length + crosshairSettings.outlineThickness * 2,
-        height: crosshairSettings.thickness + crosshairSettings.outlineThickness * 2
-      };
-
-      line.style.width = sizeMain.width + "px";
-      line.style.height = sizeMain.height + "px";
-
-      if (outline) {
-        outline.style.width = sizeOutline.width + "px";
-        outline.style.height = sizeOutline.height + "px";
-      }
+      line.style.width = crosshairSettings.length + "px";
+      line.style.height = crosshairSettings.thickness + "px";
 
       let x = dir === "left"
         ? -(crosshairSettings.gap + crosshairSettings.length)
@@ -210,20 +319,12 @@ function createCrosshair() {
       line.style.top = "50%";
       line.style.left = `calc(50% + ${x}px)`;
       line.style.transform = "translateY(-50%)";
-
-      if (outline) {
-        outline.style.top = "50%";
-        outline.style.left = `calc(50% + ${x - crosshairSettings.outlineThickness}px)`;
-        outline.style.transform = "translateY(-50%)";
-      }
     }
 
-    if (outline) crosshair.appendChild(outline);
     crosshair.appendChild(line);
   });
 }
 
-// initialize crosshair
 createCrosshair();
 
 init();
@@ -265,8 +366,9 @@ function init() {
 
   document.addEventListener("mousedown", shoot);
 
-  // ✅ FIX: attach play again button
-  document.getElementById("playAgain").addEventListener("click", resetGame);
+  // ✅ FIX: safe attach
+  const btn = document.getElementById("playAgain");
+  if (btn) btn.addEventListener("click", resetGame);
 
   updateUI();
 }
@@ -279,7 +381,6 @@ function spawnTarget() {
   let size = Math.max(0.15, 0.4 - score * 0.005);
 
   const geo = new THREE.SphereGeometry(size, 32, 32);
-
   const mat = new THREE.MeshStandardMaterial({
     color: 0xff0000,
     roughness: 0.4,
@@ -359,9 +460,10 @@ function updateUI() {
   document.getElementById("score").innerText = score;
   document.getElementById("hits").innerText = hits;
   document.getElementById("misses").innerText = misses;
+  document.getElementById("time").innerText = timeLeft;
 
   let total = hits + misses;
-  let acc = total > 0 ? ((hits / total) * 100).toFixed(1) : 100;
+  let acc = total > 0 ? ((hits / total) * 100).toFixed(0) : 100;
 
   document.getElementById("accuracy").innerText = acc + "%";
 
@@ -394,13 +496,21 @@ function endGame() {
     localStorage.setItem("bestScore", bestScore);
   }
 
-  document.getElementById("finalScore").innerText = "Score: " + score;
-  document.getElementById("finalAccuracy").innerText = "Accuracy: " + acc + "%";
+  document.getElementById("finalScore").innerText = score;
+  document.getElementById("finalAccuracy").innerText = acc + "%";
 
-  document.getElementById("resultPanel").style.display = "block";
+  // 🔊 sound
+  endSound.currentTime = 0;
+  endSound.play();
 
-  // ✅ FIX: show button
-  document.getElementById("playAgain").style.display = "block";
+  // ✅ SHOW MODAL
+  document.getElementById("resultOverlay").style.display = "flex";
+
+  // 🖱️ RESTORE NORMAL CURSOR
+  document.body.style.cursor = "default";
+
+  // ❌ HIDE CROSSHAIR
+  document.getElementById("crosshair").style.display = "none";
 }
 
 function resetGame() {
@@ -419,10 +529,15 @@ function resetGame() {
   spawnInitialTargets();
 
   updateUI();
-  document.getElementById("time").innerText = timeLeft;
 
-  document.getElementById("resultPanel").style.display = "none";
-  document.getElementById("playAgain").style.display = "none";
+  // ❌ HIDE MODAL
+  document.getElementById("resultOverlay").style.display = "none";
+
+  // 🎯 RESTORE CROSSHAIR
+  document.body.style.cursor = "none";
+  document.getElementById("crosshair").style.display = "block";
+
+  document.getElementById("time").innerText = timeLeft;
 
   startTimer();
 }
@@ -438,9 +553,6 @@ function animate() {
   renderer.render(scene, camera);
 }
 </script>
-<div id="timerUI" style="position:absolute; top:10px; right:10px; color:white;">
-  Time: <span id="time">60</span>
-</div>
 
 <footer id="footer">
   Aim Trainer - "xkysoft interactive" Tegar Ibrahim 2026
