@@ -142,6 +142,15 @@ Stored locally in browser:
 <img width="1356" height="585" alt="image" src="https://github.com/user-attachments/assets/51bc6f5b-6358-4224-a387-7de43c3ffd3a" />
 > Stable version release
 <img width="1374" height="640" alt="image" src="https://github.com/user-attachments/assets/7721d48f-a3c3-4fb1-b465-e867d0925ae6" />
+> Stable version result overlay
+<img width="1592" height="764" alt="image" src="https://github.com/user-attachments/assets/370e9b52-122b-446c-a251-5cdce612d5e6" />
+> V1.4 with new HUD
+<img width="1365" height="651" alt="image" src="https://github.com/user-attachments/assets/3e23cf1e-197d-456b-88e9-9b1d371c7644" />
+> V1.4 with new result overlay modal
+<img width="1591" height="758" alt="image" src="https://github.com/user-attachments/assets/bfe601be-7e74-4ca0-8537-02a30dffaa9b" />
+
+
+
 
 
 ---
