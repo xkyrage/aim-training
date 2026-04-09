@@ -148,6 +148,11 @@ Stored locally in browser:
 <img width="1365" height="651" alt="image" src="https://github.com/user-attachments/assets/3e23cf1e-197d-456b-88e9-9b1d371c7644" />
 > V1.4 with new result overlay modal
 <img width="1591" height="758" alt="image" src="https://github.com/user-attachments/assets/bfe601be-7e74-4ca0-8537-02a30dffaa9b" />
+> V1.5 Adding Main Menu and update result overlay menu
+<img width="2557" height="1273" alt="image" src="https://github.com/user-attachments/assets/60014385-f411-47bc-9247-fa3bb5049cbb" />
+<img width="2549" height="1271" alt="image" src="https://github.com/user-attachments/assets/a7919ee3-26c9-4662-a2ef-811329252d06" />
+
+
 
 
 
