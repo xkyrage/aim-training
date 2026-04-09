@@ -6,6 +6,41 @@ The format is based on Keep a Changelog
 and this project follows Semantic Versioning (SemVer).
 
 ---
+## [0.8.0] - 2026-04-09
+### Menu System & Session Improvements
+Added:
+- Main Menu modal displayed when the page loads
+- Game configuration controls:
+- Target count slider (1–6 targets)
+- Session timer slider (10–60 seconds)
+- Result Overlay after session ends
+- Retry button to restart the session immediately
+- Back to Menu button
+- Crosshair UI system
+- Session sound effects (shoot, hit, miss, end notification)
+Improved:
+- Menu UI layout for better visual consistency
+- Result overlay styled to match main menu appearance
+- Target spawn system improved to prevent overlapping targets
+- Target speed scaling based on score
+- UI updates for score, hits, misses, accuracy, and timer
+Fixed:
+- Result overlay appearing when the page first loads
+- Game always starting with default values instead of menu settings
+- Retry button not triggering a new session
+- Menu button not resetting the game properly
+- Last Accuracy statistic not updating correctly
+- Best Score not saving correctly due to localStorage string parsing
+- Menu statistics not refreshing after a session ends
+Changed:
+- Back to Menu button now performs a full page reload to reset game state and refresh menu statistics automatically Stats System
+
+Session results now store:
+
+- Best Score
+- Last Accuracy
+
+Saved using browser `localStorage`.
 
 ## [0.7.0] - 2026-04-07
 ### Added
