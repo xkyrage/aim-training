@@ -1,6 +1,6 @@
 <img width="1573" height="340" alt="image" src="https://github.com/user-attachments/assets/efbf69f2-215f-4f96-a08a-82854f149cd8" />
 
-![Version](https://img.shields.io/badge/version-0.7.0-blue) ![Status](https://img.shields.io/badge/status-active-success) ![License](https://img.shields.io/badge/license-MIT-green) ![Made with](https://img.shields.io/badge/made%20with-Three.js-orange) ![Platform](https://img.shields.io/badge/platform-web-lightgrey) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
+![Version](https://img.shields.io/badge/version-0.8.0-blue) ![Status](https://img.shields.io/badge/status-active-success) ![License](https://img.shields.io/badge/license-MIT-green) ![Made with](https://img.shields.io/badge/made%20with-Three.js-orange) ![Platform](https://img.shields.io/badge/platform-web-lightgrey) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
 
 # Simple FPS aim trainer
 A lightweight browser-based FPS aim trainer built with **Three.js**, featuring **Valorant-style crosshair**, hit feedback, stats tracking, and dynamic difficulty.
