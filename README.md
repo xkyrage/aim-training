@@ -14,7 +14,7 @@ A lightweight browser-based FPS aim trainer built with **Three.js**, featuring *
 ### Core Gameplay
 
 * 3D targets with lighting (real depth feel)
-* 3 simultaneous targets
+* customized simultaneous targets
 * Moving targets with increasing speed
 * Miss penalty system (score -1)
 
