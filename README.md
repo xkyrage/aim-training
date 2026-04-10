@@ -24,21 +24,6 @@ A lightweight browser-based FPS aim trainer built with **Three.js**, featuring *
 * Hit / miss / shoot sound effects
 * Hit flash effect on target
 
-### Crosshair (Valorant-style)
-
-* Adjustable:
-
-  * Thickness
-  * Length
-  * Gap
-  * Outline
-* Clean + customizable UI-based rendering
-
-### Game Mode
-
-* 60-second timed session
-* End-game summary (score & accuracy)
-* "Play Again" restart system
 
 ### Stats Tracking
 
@@ -65,24 +50,6 @@ A lightweight browser-based FPS aim trainer built with **Three.js**, featuring *
 
 ---
 
-## 📂 Project Structure
-
-```
-aim-trainer/
-│
-├── index.html
-├── asset/
-│   ├── img/
-│   │   └── grid-background.jpg
-│   └── sound/
-│       ├── shoot.mp3
-│       ├── hit.mp3
-│       └── miss.mp3
-│
-└── README.md
-```
-
----
 
 ## ▶How to Run
 
